@@ -1,0 +1,63 @@
+---
+title: "Introducción a R y R-Studio"
+author: "Felipe Pérez Vargas"
+date: "22/1/2021"
+output: html_document
+---
+
+### Introducción a R
+
+R es un lenguaje y entorno de programación para el análisis estadístico y gráfico. Se trata de un proyecto de software libre, siendo muy popular en el campo de la investigación biomédica, la bioinformática y en las matemáticas financieras.<br> 
+
+
+Proporciona un amplio abanico de herramientas estadísticas y gráficas gracias que el usuario puede definir sus propias funciones o desarrollar paquetes o librerías de acuerdo a las necesidades.<br>
+
+puede considerarse  un lenguaje de programación orientado a objetos. Además, puede establecer comunicación con diferentes bases de datos y tiene librerías que permiten la implementación de lenguajes de programación (Python). También cuenta con recursos como:<br>
+
+** Presentaciones en Latex <br>
+** Desarrollo de apps <br>
+** Escritura de libros <br>
+** Documentos HTML <br>
+** Muchas cosas más.......
+
+
+Otra de las características, es  su gran capacidad para generar gráficos de alta calidad y finalmente se puede usar como herramienta de cálculo numérico compitendo con software comerciales como Matlab.
+
+
+### Intalación de R y R-Studio
+
+Vamos a los siguientes links:
+
+**[R Project](https://www.r-project.org)** <br>
+
+Aunque podemos usar R directamente, es recomendable instalar y usar un entorno integrado de desarrollo (IDE, por sus siglas en inglés).
+
+**[R Studio](https://rstudio.com/products/rstudio/download/)** <br>
+
+
+### Entorno de Trabajo 
+
+
+
+### Instalación de paquetes 
+
+
+### Estructura de datos: Vectores, matrices, listas y data frames.
+
+
+### Funciones, argumentos, condicionales, bucles y funciones propias.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

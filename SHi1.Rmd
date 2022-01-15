@@ -1,0 +1,36 @@
+
+---
+title: "Semana 1"
+output:
+tufte::tufte_html:
+margin_references: false
+number_sections: true
+---
+
+## Capítulo 1  {.tabset .tabset-fade .tabset-pills}
+
+### Definición y características del riesgo
+
+```{r}
+library(flexdashboard)
+gauge(91, min = 0, max = 100, symbol = '%', gaugeSectors(
+success = c(80, 100), warning = c(40, 79), danger = c(0, 39)
+))
+```
+
+
+### El ciclo de la administración del riesgo
+
+
+### La relación Riesgo-Rendimiento
+
+
+### Los riesgos incurridos por las instituciones financieras de acuerdo a Basilea
+
+### El perfil del Inversionista
+
+###  Especuladores, hedgers e inversionistas
+
+
+
+

@@ -1,0 +1,207 @@
+---
+title: "Rendimiento y Riesgo"
+author: "Felipe Pérez Vargas"
+date: "20/2/2021"
+output:
+    html_document: default
+---
+
+En teoría financiera existen dos variables básicas que es preciso entender y saber calcular aproximadamente para tomar decisiones de inversión: **El rendimiento y el riesgo**
+
+![riesgo-rendimiento](r12.png)
+
+
+
+### Rendimiento
+
+El rendimiento de un activo o portafolio es el cambio de valor que registra es un periodo con respecto a su valor inicial:
+
+$$
+R_{i}=\frac{\Delta Valor}{Valor_{inicial}}=\frac{Valor_{final}-Valor_{inicial}}{Valor_{inicial}}
+$$
+
+El rendimiento también se puede definir en función del logaritmo de la razón 
+de rendimientos sigue:
+
+$$
+R_{i}=Ln(\frac{P_{t}}{P_{t-1}})
+$$
+
+
+El rendimiento de un portafolio se define como:
+
+$$
+R_{p}=\sum_{i=1}^{n}\omega_{i}R_{i}
+
+$$
+### Medición del Riesgo 
+
+Una distribución de frecuencias muestra la manera como los rendimientos de algún activo se han comportado en el pasado. Cuando esta distribución se grafica asume una figura en particular.
+
+Los instrumentos financieros presentan por lo general una distribución de probabilidad normal. Los parámetros más importantes que la definen son la media y la desviación estándar.
+
+Otros indicadores importantes que definen a la distribución normal son el sesgo y la kurtosis.
+
+
+**En un portafolio, la media es simplemente su rendimiento promedio y la desviación estándar se define como la volatilidad.**
+
+Adicionalmente a la media y a la desviación estándar, la curva de distribución normal tiene dos características: el sesgo y la kurtosis.
+
+
+El sesgo es un indicador que mide la simetría de la curva. En el caso de una curva normal perfecta, el sesgo será igual a cero. Si éste es distinto de cero, estará sesgada hacia la izquierda o hacia la derecha según el signo del sesgo.
+
+$$
+
+\text{Sesgo}=\frac{\sum(x_{i}^{n}-\mu)^{3}}{(n-1)\sigma^{\frac{3}{2}}}
+
+$$
+
+La kurtosis es el indicador que mide el levantamiento de la curva respecto a la horizontal. A este fenómeno de alta kurtosis también se le conoce como **fat tails** La kurtosis de una distribución normal perfecta es igual a 3.
+
+
+$$
+Kurtosis=\frac{\sum(x_{i}^{n}-\mu)^{4}}{(n-1)\sigma^{4}}
+$$
+
+![Curtosis](curtosis.jpg)
+
+
+
+Para saber si una distribución de frecuencias se comporta de acuerdo a una distribución normal, existen varia pruebas. La más sencilla es la Jarque-Bera.
+
+$$
+
+LM=N[\frac{Sesgo^{2}}{6}+\frac{(Kurtosis-3)^{2}}{24}]
+
+$$
+
+
+![Curtosis](asimetria_estadistica.png)
+
+
+
+
+```{r}
+# #Prueba de Asimetría
+# S<-(sum((rvec-mean(rvec))^{3}))/(length(rvec)*sd(rvec)^{3});S
+# round(skewness(rvec),2)
+# 
+# #Prueba de Kurtosis en busca peso de las colas
+# K<-(sum((rvec-mean(rvec))^{4}))/(length(rvec)*sd(rvec)^{4});K
+# round(kurtosis(rvec),2)
+# 
+# #Prueba de normalidad asimetría=0 y Kurtosis=3 en los errores
+# JB<-(length(rvec)/6)*(S^{2}+(K-3)^{2}/4);JB
+# jarque.test(rvec)
+```
+
+
+### Covarianza
+
+Es una medida de la relación lineal entre dos variables aleatorias describiendo el movimiento conjunto entre éstas. Dichas variables pueden ser los rendimientos de un  portafolio.
+
+
+$$
+COV(R_{i}, R_{j})=\frac{1}{n}\sum_{i=1}^{n}[R_{i}-\mu_{i}][R_{j}-\mu_{j}]
+$$
+
+
+### Correlación 
+
+Debido a la dificultad para interpretar la magnitud de la covarianza, suele utilizar la correlación para medir el grado de movimiento entre dos variables o la relación lineal entre ambas. 
+
+
+$$
+Corr(R_{i},R_{j})=\rho_{ij}=\frac{COV(R_{i}, R_{j})}{\sigma_{i}\sigma_{j}}
+
+$$
+
+### MOdelo CAPM: Capital Asset Pricing Model 
+
+En este modelo propuesto por Sharpe establece que el rendimiento de un activo o portafolio es igual a la tasa libre de riesgo, más un premio por el riesgo que tiene ese instrumento o portafolio medido por el coeficiente beta:
+
+$$
+RI(P)=w*r^{t}
+$$
+$$
+RE(P)=\sqrt{w*s*w^{t}}
+$$
+
+
+
+$$
+R_{p}=r_{f}+\beta_{p}(R_{m}-r_{f})
+$$
+![CAPM](capm.png)
+### La volatilidad 
+
+La volatilidad es la variable más importante para determinar el valor en riesgo (VaR) de un portafolio de activos.
+
+
+La volatilidad es la desviación estándar de los rendimientos de un activo o portafolio. Es un indicador fundamental para la cuantificación de riesgos de mercado porque representa una medida de la dispersión de los rendimientos con respecto a la media en un periodo determinado.
+
+### Volatilidad histórica
+
+En este método se hace énfasis en el pasado inmediato, es decir, todas las observaciones tienen el mismo peso especifico y el pronóstico está basado en las observaciones históricas.
+
+$$
+\sigma=\sqrt(\frac{\sum_{i=1}(r_{i}-\mu)}{n-1})
+$$
+```{r}
+Rendi<-c(5.20,-3.90,2.50,-4.40,-3.30,1.20,2.45,-4.50,-4.72,1.70)
+sd(Rendi)/100
+
+
+```
+
+
+
+El hecho de asignar el mismo peso especifico a todas las observaciones, en la serie de tiempo de rendimientos a motivado a desarrollar otros métodos.
+
+
+### Volatilidad dinámica o con suavizamiento exponencial
+
+Esta metodología le confiere mayor peso a las últimas  y más recientes observaciones que alas primeras o más alejadas en el tiempo. La volatilidad dinámica captura rápidamente fuertes variaciones de precios debido a su ponderación, y por ellos es posible generar mejores pronósticos en épocas de 
+alta volatilidad.
+
+$$
+
+\sigma_{t}^{2}=(1-\lambda)\sum_{i=1}^{r}\lambda^{i-1}r_{t-1}
+$$
+El modelo anterior se puede expresar mediante una relación de recurrencia de la manera siguiente:
+
+$$
+\sigma_{t+1}^{2}=(1-\lambda)r_{i}^{2}+\lambda\sigma_{t}^{2}
+$$
+El modelo depende de un parámetro $\lambda$ que se encuentra entre 0 y 1 conocido como factor de decaimiento.
+
+```{r}
+lambda<-0.9
+A<-lambda^{10-1};A
+r2<-Rendi[10]^{2};r2/10000
+A*r2/10000
+
+```
+
+
+
+
+El nivel de tolerancia dado es:
+
+$$
+NT=\lambda^{k}
+$$
+
+### Método RMSE (Root Mean Squared Error)
+
+Este método permite determinar una lambda óptima que minimice el error pronosticado de la varianza.
+
+$$
+RMSE=\sqrt(\frac{1}{T}\sum_{i=1}^{T}[r_{t+1}^{2}-\sigma_{t+1}^{2}(\lambda)]^{2})
+
+$$
+### Volatilidad implicita 
+
+
+Esta volatilidad no se basa en considerar observaciones históricas sino en observar la volatilidad existente en el mercado de opciones. 
+

@@ -1,0 +1,22 @@
+---
+title: "Primeros pasos"
+author: "Felipe Pérez Vargas"
+date: "30/1/2021"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+
+*** Introducción al paquete quantmod 
+
+La libraería queantmod esta diseñada para realizar 
+
+```{r}
+rm(list=ls())
+# http://www.quantmod.com/examples/
+stock1<-getSymbols('GME',src='yahoo',env=NULL, auto.assign = TRUE)#[,c(4)]
+ options("getSymbols.warning4.0"=FALSE)
+plot(stock1)
+
+```

@@ -1,0 +1,126 @@
+---
+title: "Riesgo de Mercado y Productos Derivados"
+author: "Felipe Pérez Vargas"
+date: "22/12/2020"
+output: tufte::tufte_html
+# ioslides_presentation 
+# tufte::tufte_html
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+<!-- H~3~PO~4~ Subíndice   --> 
+<!-- Cu^2+^ Superinidice-->
+<!-- [RStudio](https://www.rstudio.com) Incluir link -->
+
+
+```{r, out.width='95%', fig.align='center', fig.cap='Título de la Imágen'}
+knitr::include_graphics('P3.png')
+```
+
+
+```{r out.width='100%', echo=FALSE}
+library(leaflet)
+leaflet() %>% addTiles() %>%
+setView(-93.65, 42.0285, zoom = 17) %>%
+addPopups(
+-93.65, 42.0285,
+'Here is the <b>Department of Statistics</b>, ISU'
+)
+```
+
+
+
+
+![Etiqueta de la imagen ](C:/Users/Admin/Desktop/Riesgo_Maestría/P3.png)
+
+#beamer_presentation
+# github_document
+# html_document
+• ioslides_presentation
+• latex_document
+• md_document
+• odt_document
+• pdf_document
+• powerpoint_presentation
+• rtf_document
+• slidy_presentation
+• word_document
+
+# First-level header
+## Second-level header
+### Third-level header
+
+$$\begin{array}{ccc}
+x_{11} & x_{12} & x_{13}\\
+x_{21} & x_{22} & x_{23}
+\end{array}$$
+
+
+$$X = \begin{bmatrix}1 & x_{1}\\
+1 & x_{2}\\
+1 & x_{3}
+\end{bmatrix}$$
+
+
+
+$$\Theta = \begin{pmatrix}\alpha & \beta\\
+\gamma & \delta
+\end{pmatrix}$$
+
+
+$$\begin{vmatrix}a & b\\
+c & d
+\end{vmatrix}=ad-bc$$
+
+```{r, fig.dim = c(6, 4)}
+x <- rnorm(100)
+cat('**Markdown** is cool.\n')
+```
+
+
+
+
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example ^[Así se pone un pie de nota.]:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+@Manual{R-base,
+title = {R: A Language and Environment for Statistical
+Computing},
+author = {{R Core Team}},
+organization = {R Foundation for Statistical Computing},
+address = {Vienna, Austria},
+year = {2017},
+url = {https://www.R-project.org/},
+}
+
+
+
+
+
+$$ MPG=\beta_{0}+\beta_{1}Cylinders+\beta_{2}Displacement+\beta_{3}Horsepower+\beta_{4}Weight+\beta_{5}Acceleration$$
+
+
+
+
+
+

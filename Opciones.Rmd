@@ -1,0 +1,326 @@
+---
+title: "Opciones Financieras"
+author: "Felipe Pérez Vargas"
+date: "17/4/2021"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+### Metodología para cálculo del VaR
+El Valor en Riesgo se puede calcular mediante dos métodos
+
+* Métodos paramétricos
+* Métodos no-paramétricos
+
+#### Métodos Paramétricos
+
+Tiene como característica el supuesto de que los rendimientos de activo en cuestión se distribuye de acuerdo con una curva de densidad de probabilidad normal.
+
+Sin embargo, en la práctica se ha observado que la mayoría de los activos no siguen ese comportamiento, sino que son aproximados a la curva normal y por tanto, los resultados que se obtiene al medir el riesgo es una aproximación.
+
+#### Valor en riesgo de un activo individual
+
+Bajo el supuesto de normalidad y media de los rendimientos igual a cero, el modelo paramétrico que determina el valor en riesgo de una posición es el siguiente:
+
+
+$$VaR=F\times S \times \sigma \times \sqrt(t)  $$
+
+Donde:
+
+F= Factor que determina el nivel de confianza del cálculo. Para el nivel de confianza de 95%, F=1.65,  y para el nivel de confianza de 99%, F=2.33.
+S= Monto total de la inversión o esposición total al riesgo
+$\sigma$= Desviación esstándar de los rendimientos del activo 
+t= Horizonte de tiempo en el que se desea calcular el VaR (Holdong Period)
+
+
+Ejemplo
+
+
+Un inversionista compra 10000 acciones en el mercado accionario cuyo precio es de $30 por acción y su volatilidad es de 20 %. ¿Cuál es el VaR diario de esta posición considerando el 95% y 99% de confianza. 
+
+$$ VaR=1.65 \times \$ 300000 \times 0.20 \times \sqrt(\frac{1}{252})= \$ 6236.41 $$ 
+
+Esto significa que que un día de cada 20, el inversionista sufrirá una perdida  de $6236.41
+ o más. Esta cifra se puede utilizar como límite como revelación del riesgo del portafolio o margen en contratos a futuros. 
+ 
+#### Valor en riesgo de un portafolio de activos (Método  de varianza-covarianza o dalta normal)
+
+ Supongamos un portafolio con dos activos riesgosos en cuyo caso se tiene un peso especifico w1 y w2 de tal manera que $w_{1}+w_{2}=1$ de acuerdo a Markowitz, la varianza del portafolio es:
+ 
+ 
+ $$ \sigma^{2}= w_{1}\sigma_{1}^{2}+w_{2}\sigma_{2}^{2}+2w_{1}w_{2}\rho_{12}\sigma_{1}\sigma_{2}$$
+ 
+
+
+### **Origen de las Opciones**
+
+Surgen desde hace más de cientos de años para asegurar las condiciones de operación 
+sobre mercancías.
+
+El primer mercado organizado data del siglo XVII en Holanda donde se aseguraban las 
+las condiciones de venta de los Tulipanes. Posteriormente surgieron otros mercados 
+donde se aseguraban contratos sobre entrega de materias primas como arroz.
+
+En 1973 comienza a operar el Chicago Boards Options Exchange (CBOE) considerado el primer mercado organizado del mundo.
+
+
+El origen de los contratos de productos derivados es **la cobertura frente al riesgo de precio**
+derivado de la incertidumbre sobre la evolución del precio del activo.
+
+
+El hecho de poder conocer los precios a pagar o cobrar por la cosecha y permitía a ambas partes afrontar el futuro con mayor tranquilidad.
+
+
+Una opción es la acción que te otorga el derecho de comprar o vender un activo subyacente, a un 
+precio determinado, durante la vida de un contrato o en la fecha de vencimiento del mismo , a cambio del pago de una prima. 
+
+Los elementos fundamentales  son los siguientes:
+
+**Derecho:** a comprar o vender.
+
+**Activo Subyacente:** Activo financiero, materia prima.
+
+**Precio de Ejercicio:** Precio fijado en el contrato para comprar o vender durante la vigencia
+del contrato.
+
+**Vencimiento:** Periodo de duración del contrato.
+
+**Prima:** Es el precio que los compradores de las opciones deben de pagar a los vendedores
+por adquirir el derecho a comprar o el derecho a vender.
+
+
+### **Opciones de Compra (CALL)**
+
+
+Comprador -----> Derecho a Comprar    -----> Pago de prima
+
+Vendedor  -----> Obligación a vender  -----> Cobro de prima
+
+
+### **Opciones de Venta (PUT)**
+
+
+Comprador ----->  Derecho a Vender         -----> Pago de prima
+
+Vendedor  ----->  Obligación a Comprar     -----> Cobro de prima
+
+### **Tipos de Opciones en función del momento en el que se puede ejercer**
+
+**Opciones Europeas:** Únicamente podrá ejercitarse el derecho en la fecha de vencimiento 
+establecida en el contrato.
+
+**Opciones Americanas:**Podrá ejercitarse el derecho en cualquier momento hasta la fecha 
+de vencimiento.
+
+
+>  **Tipos de Opciones en función de la naturaleza del activo subyacente**
+
+
+* **Opciones Financiera:** 
+
+  + Opciones sobre índices bursátiles
+
+  + Opciones sobre acciones
+
+
+* **Opciones no financieras**
+
+  + Opciones sobre materias primas
+
+
+### **Operación de Opciones**
+
+Para abrir las posiciones en el mercado es necesaria la participación de un intermediario 
+financiero.
+
+El mercado exige el deposito de un importe en conceptos de **garantía** para aquellas 
+posiciones que impliquen obligaciones (vendedor de opciones).
+
+
+Una vez comprada la opción se podrá:
+
+* **Mantener la opción hasta el vencimiento**, momento en el que el comprador
+decidirá sobre el ejercicio del derecho.
+
+* **Cerrar la posición en el mercado antes del vencimiento** realizando la operación 
+contraria para el mismo subyacente, tipo de opción, precio de ejercicio y vencimiento.
+
+
+### **Usos y aplicaciones de las opciones**
+
+
+
+### Valor de una opción. Modelo Black Scholes
+
+El modelo Black-Scholes asume que el comportamiento de los precio sigue una distribución normal y se muestra como una forma de cobertura con un portafolio que contenga posiciones largas y cortas  de opciones. A continuación se presenta la formula para evaluación de opciones de compra (call):
+
+
+
+$$C=SN(d_{1})-K \exp^{-rt}N(d_{2})   $$
+
+con 
+
+$$ d1=\frac{ln(\frac{S}{K})+[r+\frac{\sigma^{2}}{2}]t}{\sigma \sqrt(t)}  $$
+$$  d_{2}= d1- \sigma \sqrt(t) $$
+
+donde:
+
+S = Valor del bien subyacente
+K = Precio de ejercicio de la opción 
+r = Tasa libre de riesgo 
+t = Periodo de la acción
+$\sigma$ = Volatiliad del bien subyacente
+$N(d_{1})$ y $N(d_{2})$ = valores que corresponden a la curva de distribución normal acumulada.
+
+
+Supuestos del modelo Black-Scholes
+
+
+* La tasa libre de riesgos de corto plazo es conocida y es constante durante la vida de la opción 
+
+* El precio del valor subyacente se comporta de acuerdo a una caminata aleatoria en tiempo continuo y a la distribución normal. La varianza del rendimiento es constante durante el periodo de la acción.
+
+* No se considera el pago de dividendos si el valor del subyacente es una opción o el pago de intereses si dicho subyacente es un bono 
+
+
+* La opción es europea, es decir, solo se ejerce al vencimiento de la opción
+
+* Es posible pedir prestado una parte del valor del subyacente para comprarlo o mantenerlo, a una tasa libre de riesgo de corto plazo.
+
+
+* No hay costos de transacción en la compra o en la venta del subyacente o la opción.
+
+
+Sea una opción con un precio de ejercicio de $\$35$, a un plazo de tres meses y la volatilidad de los rendimientos del subyacente sea del 10% anual. La tasa de interés libre de riesgo es del 15% y el valor del mercado del bien subyacente es de $\$35$ 
+
+
+
+Solución 
+
+
+Primero debemos de calcular el valor de $d_{1}$ y $d_{2}$  de la siguiente forma:
+
+
+
+$$ d1=\frac{ln(\frac{38}{35})+[0.15+\frac{(0.1)^{2}}{2}]0.25}{0.25 \sqrt(0.25)}=2.4198  $$
+Para $d_{2}$
+
+$$ d_{2}= 2.4198- 0.25 \sqrt(0.25)=2.3698$$
+
+Buscando en las tablas de distribución normal, podemos determinar que:
+
+
+$N(d_{1})=0.9920$
+$N(d_{2})=0.9909$
+
+Por tantoi tenemos que el precio de la opción es de:
+
+
+$$C=38*0.9920-39 \exp^{-(0.25*0.15)}0.9909=4.29   $$
+
+Existen modificaciones al modelo BS: para el caso de acciones que pagan dividendos, el modelo se conoce como Miller; para el caso de monedas o tipos de cambio se denomina Germa-Kolhgahem; para el caso de la valuación de opciones de tasas de interés, el modelo es el de Black.
+
+
+
+Modelo paridad put-call
+
+
+La paridad put-call es una relación muy importante en opciones, ya que permite calcular el valor de la opción de venta put, conociendo el valor de la compra call con el modelo siguiente:
+
+
+$$ C+K\exp^{-rt}=P+S  $$
+
+### Medidas de sensibilidad al precio de la opción 
+
+La sensibilidad del precio de la opción a los movimientos del bien subyacente es lo que se conoce como delta. Tomando la derivada parcial del precio de una opción de compra de la forma BS, se tiene:
+
+#### Delta
+
+$$ \Delta_{c}=\frac{\partial C}{\partial S}=N(d_{1}) $$
+De la misma manera, la delta de una opción de venta es la siguiente:
+
+$$ \Delta_{p}=\frac{\partial P}{\partial S}=N(d_{1})-1 $$
+
+Si la delta de una opción de 100 acciones es igual a 0.45, se requiere comprar o vender (según sea el caso) acciones para lograr la cobertura delta
+
+
+
+#### Gamma
+
+La gamma se define como la sensibilidad de la delta a cambios en el subyacente. También se le conoce como la segunda derivada del precio de la opción respecto al valor subyacente. De acuerdo con BS:
+
+$$ \gamma_{c}=\frac{\partial^{2}c}{\partial S^{2}}=\frac{\partial \Delta}{\partial S}= \frac{N(d_{1})}{S\sigma\sqrt(t)}  $$
+
+Con 
+
+$$N(d_{1})=\frac{1}{2\pi}\exp^{-0.5d_{1}^{2}}$$
+
+La gamma e sun indicador de que tan frecuente debe de rebalancearse su portafolio para lograr una adecuada cobertura delta.
+
+
+#### Ejemplo
+
+Considere una opción con las siguientes características:
+
+* S=100
+* K=110
+* t=0.5
+* r=0.08
+* $\sigma$=0.3
+
+
+
+#### Theta
+
+La theta es la sensibilidad del precio de la opción al periodo que le resta a la opción para que expire. según BS es:
+
+$$\theta_{c}=\frac{\partial c}{\partial t}=[\frac{S\sigma}{2\sqrt(t)}]N(d_{1})+K\exp^{-rt}rN(d_{2})$$
+
+
+
+
+#### Rho
+
+la Rho es la sensibilidad del precio de la opción a cambis en las tasas de interés del riesgo
+
+$$ \rho_{c}=\frac{\partial c}{\partial r}=tK\exp^{-rt}N(d_{2})  $$
+#### Vega
+
+La vega es la sensibilidad del precio de la opción a cambios en la volatilidad del subyacente.
+
+$$ \nu_{c}=\frac{\partial c}{\partial \sigma}=S\sqrt(t)N(d_{1}) $$
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- ```{r,results='asis', message = FALSE, error = FALSE, warning= FALSE} -->
+<!-- library(quantmod) -->
+<!-- library(ggplot2) -->
+
+<!-- s1<-getSymbols('BBAJIOO.MX', source='yahoo', -->
+<!--                from = '2016-02-19',  -->
+<!--                auto.assign = FALSE, warnings = FALSE) -->
+
+
+
+<!-- ``` -->

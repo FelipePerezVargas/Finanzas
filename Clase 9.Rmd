@@ -1,0 +1,207 @@
+---
+title: "Optimización de un Portafolio y Volatilidades"
+author: "Felipe Pérez Vargas"
+date: "12/3/2021"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+### Analisis de una Acción 
+
+Para poder determinar el riesgo asociado a un activo debemos de tomar estadísticas vitales para poder determinar cual es el nivel de riesgo de dicho activo.
+
+Durante la clase vamos a realizar algunos de los tantos parámetros de interés que se aplican al momento de tomar una decisión de inversión.
+
+Paso 1 Descargar los precios históricos de alguna de las fuentes conocidas, para este caso nos vamos a apoyar del software open source R. También nos apoyaremos principalmente de los paquetes o librerías especializadas para las finanzas, los paquetes qeu se van a utilizar son:
+
+* quantmod
+* PortfolioAnalytics
+* PerformanceAnalytics
+* fPortfolio
+
+Otros paquetes auxiliares para la visualización de datos y calculos especificos son:
+
+* fBasics
+* highcharter
+* dplyr
+
+
+Lo primero que vamos a hacer es cargar los paquetes antes mencionados para poder realizar 
+los cálculos
+
+
+```{r,results='asis', message = FALSE, error = FALSE, warning= FALSE}
+
+ # install.packages("quantmod")
+ # install.packages("PortfolioAnalytics")
+ # install.packages("PerformanceAnalytics")
+ # install.packages("fPortfolio")
+ # install.packages("fBasics")
+ # install.packages("highcharter")
+ # install.packages("dplyr")
+ # install.packages("ggplot2") 
+ # install.packages("plotly")
+ # Ahora instalamos las librerías
+ # library(quantmod)
+ # library(PortfolioAnalytics)
+ # library(PerformanceAnalytics)
+ # library(fPortfolio)
+ # library(fBasics)
+ # library(highcharter)
+ # library(dplyr)
+ # library(plotly)
+ # library(ggplot2)
+  
+
+```
+
+
+Una vez instalados y cargadas las librerías vamos a realizar lo siguiente:
+
+### Paso 1-Cargar los precios históricos de una acción
+Para realizar esto vamos a utilizar el paquete **quantmod** con las siguientes instrucciones.
+
+Para este caso usamos los precios históricos de los últimos años Alsea de México.
+
+```{r,results='asis', message = FALSE, error = FALSE, warning= FALSE}
+library(quantmod)
+Al<-getSymbols('ALSEA.MX',src='yahoo', from="2016-03-12", 
+               auto.assign = FALSE)
+# Ahora seleccionamos los precios de cierre para trabajar con ellos
+Alsea<-Al$ALSEA.MX.Adjusted
+# Cambiamos de nombre el encabezado
+colnames(Alsea)<-'P_Cierre'
+
+```
+
+Paso 2- Realizamos el primer gráfico para conocer el comportamiento de los precios históricos del activo con el comando **lineChart.**
+
+El primer elemento que debe de tener es la serie de tiempo del activo y después se puede seleccionar un intervalo de tiempo. Para nuestro caso seleccionamos los últimos cinco años. La ventaja de comando **lineChart** es que nos puede servir como filtro de las fechas que nos interese analizar. 
+
+Vamos a iniciar con la serie completa, es decir los cinco años seleccionados:
+```{r,results='asis', message = FALSE, error = FALSE, warning= FALSE}
+
+lineChart(Al)
+
+
+```
+La gráfica nos muestra en la parte de arriba el comportamiento de los precios históricos, la parte inferior nos muestra el comportamiento del volumen de la acciones a través del tiempo.
+
+AHora podemos agregar instrucciones para la serie de tiempo que estamos analizando. Primero vamos a trabajar con las fechas. Empezamos con la selección de años específicos usando el comando **subset** de la siguientes forma 
+
+```{r,results='asis', message = FALSE, error = FALSE, warning= FALSE}
+lineChart(Al, subset = '2021', theme='white') #Seleccionamos un año en particular
+lineChart(Al, subset = '2019::2021', theme='white') #Seleccionamos varios años
+lineChart(Al, subset = '2019-03::2021-03', theme='white') #Seleccionamos varios años incluyendo meses
+lineChart(Al, subset = '2019-03-13/2021-13', theme='white') #Seleccionamos varios años incluyendo meses y días
+
+```
+**NOTA** El formato común para fecha es de año/mes/día
+
+Ademas de poder hacer gráfico de líneas podemos otros gráficos que nos ayuden entender el comportamiento de la serie de tiempo para poder decidir o cuantificar el riesgo del activo. 
+
+Ahora vamos a realizar el gráfico de los precios históricos en forma de barras para conocer el comportamiento del activo a través del tiempo.
+
+```{r,results='asis', message = FALSE, error = FALSE, warning= FALSE}
+
+barChart(Al, subset = '2021-03')
+
+```
+
+En la grafica podemos entender lo siguiente:
+
+* Para la primera barra el precio de cierre es mayor que el de apertura y en la tercera barra el precio de cierre es menor que el de apertura
+
+
+```{r,results='asis', message = FALSE, error = FALSE, warning= FALSE}
+candleChart(Al, subset = '2021-03')
+```
+
+Estos son los gráficos que se utilizan normalmente para poder explicar los riesgo existente. 
+
+Ahora vamos a apoyarnos del paquete **highcharter** para realizar un gráfico donde se pueda interactuar.
+
+<!--  ```{r,results='asis', message = FALSE, error = FALSE, warning= FALSE} -->
+<!-- library(highcharter) -->
+<!-- hchart(Al) -->
+<!-- ``` -->
+
+Esta es la parte de la visualización de la información, antes de continuar vamos a realizar la estimación de los parámetros vitales del activo. Para esto nos vamos a apoyar con el comando **fBasics**. Antes de eso debemos de calcular los retornos del activo.
+
+
+```{r,results='asis', message = FALSE, error = FALSE, warning= FALSE}
+library(fBasics)
+Ral<-diff(log(Al$ALSEA.MX.Adjusted)) 
+# Podemos gráficar los retornos usando el comando chartSeries del paquete quantmod
+chartSeries(Ral)
+
+# Calculamos la estadística básica con el comando basicStats del paquete fBasics
+Eal<-basicStats(Ral);Eal
+
+```
+
+Ahora podemos realizar pruebas de normalidad parapoder incluirlo en la teoría de Markowitz
+```{r,results='asis', message = FALSE, error = FALSE, warning= FALSE}
+t.test(Al$ALSEA.MX.Adjusted)
+normalTest(Al$ALSEA.MX.Adjusted, method = "jb") 
+```
+
+Realizamos el histograma de frecuencia del activo para comprobar la normalidad
+
+```{r,results='asis', message = FALSE, error = FALSE, warning= FALSE}
+Ral<-na.omit(Ral)
+hist(Ral, main='Histrograma IPC', ylab='Frecuencia',  
+     freq = FALSE, breaks = "FD", col='green')
+lines(density(Ral), col='red')
+```
+
+
+Coeficiente de variación: Variación por unidad de retorno 
+Ratio de Sharpe: Ratio que calcula el exceso de retorno por unidad de riesgo
+
+
+
+Para abundar un poco en la interpretación del los resultados obtenidos en la estadística básica y la prueba de normalidad se comenta lo siguiente.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r,results='asis', message = FALSE, error = FALSE, warning= FALSE}
+
+```
+
+```{r,results='asis', message = FALSE, error = FALSE, warning= FALSE}
+
+```
+
+```{r,results='asis', message = FALSE, error = FALSE, warning= FALSE}
+
+```
+
+```{r,results='asis', message = FALSE, error = FALSE, warning= FALSE}
+
+```
+
+```{r,results='asis', message = FALSE, error = FALSE, warning= FALSE}
+
+```
+
+
+
+
+
+
+
+

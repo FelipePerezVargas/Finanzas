@@ -1,0 +1,438 @@
+---
+title: "Ejemplo Trabajo Final"
+author: "Felipe Pérez Vargas"
+date: "27/4/2021"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+
+
+### Introducción 
+
+En el presente documento se realiza un ejercicio de caso práctico donde se arma un portafolio de inversión para calcular lo siguiente:
+
+
+* VaR en riesgo de cada una de los activos.
+* Riesgo del cada una de los activos.
+* Rendimiento y Volatilidad de cada una de los activos.
+* Pruebas de asimetría, kurtosis y prueba de normalidad de los activos. 
+* Riesgo y Volatilidad de un portafolio compuesto por dos activos.
+* Riesgo y Rendimiento de un portafolio compuesto por n activos.
+* VaR de un portafolio compuesto por dos activos
+* VaR de un portafolio compuesto por n activos
+* Modelo CAPM de cada uno de las activos
+
+Tambien se realizara la visualización de los datos de la siguiente manera
+
+* Grafico de los precios históricos de cada uno de los activos.
+* Grafico de los rendimientos de los activos. 
+* Grafica Riesgo-Rendminento de cada uno de los activos.
+* Grafica de las curva del portafolio compuesta por dos activos.
+* 
+
+
+#### Descarga de los precios históricos de las activos al igual que el IPC
+
+
+Lo primero que tenemos que hacer es descargar los precios históricos de 5 activos y el IPC. Esto lo podemos hacer dese la página de yahoo finances, para este ejercicio se van a usar las siguientes:
+
+* ^IPC-Índice de Precios y Cotizaciones 
+* AMD-Advanced Micro Devices
+* DPZ-Domino Pizza
+* BABA-Alibaba
+* FB-Facebook
+* SAM-Boston Company
+
+Una vez que descargamos los precios históricos conformamos un portafolio que 
+este compuesto por las siguientes columnas:
+
+* Fecha
+* Activo 1
+* Activo 2
+* Activo 3
+* Activo 4
+* Activo 5
+* IPC
+
+Una vez organizado el portafolio lo guaramos el documento en .csv con el nombre: Portafolio1.csv.
+
+Antes de cargar el portafolio debemos de cargar los paquetes necesarios.
+
+```{r,results='asis', message = FALSE, error = FALSE, warning= FALSE}
+rm(list = ls())
+library(readr)
+library(ggplot2)
+library(plotly)
+library(PortfolioAnalytics)
+library(moments)
+library(fPortfolio)
+library(quantmod)
+```
+
+Ahora podemos cargar el portafolio
+
+
+```{r,results='asis', message = FALSE, error = FALSE, warning= FALSE}
+P1<-read_csv("C:/Users/Admin/Desktop/Riesgo_Maestría/Portafolio1.csv")
+
+```
+
+
+Una vez que cargamos los datos realizamos un gráfico donde se puedan visualizar la evolución de los precios históricos de los activos seleccionados
+
+
+```{r,results='asis', message = FALSE, error = FALSE, warning= FALSE}
+# Graficamos el comportamiento de los precios históricos, pero primero 
+# convertimos en un data frame para poder usar el paquete ggplot2 y plotly
+p1<-data.frame(P1)
+#Gráfico de acciones
+historicos<-ggplot(p1, aes(x=Fecha)) +
+        geom_line(aes(y=AMD), color = 'aquamarine', size = 1) + 
+        geom_line(aes(y=BABA), color = 'azure4', size = 1) +
+        geom_line(aes(y=DPZ), color = 'cornflowerblue', size = 1) +
+        geom_line(aes(y=FB), color = 'brown1', size = 1) +
+        geom_line(aes(y=SAM), color = 'orange', size = 1) +
+        labs(x='Fecha', y='Precio (MXN)') +
+        ggtitle('Portafolio de Inversión')
+#Gráfico interactivo de la evolución de los precios históricos        
+ggplotly(historicos)
+
+```
+Ahora vamos a calcular los rendimientos de cada uno de los activos
+```{r,results='asis', message = FALSE, error = FALSE, warning= FALSE}
+# AMD
+R1<-diff(log(as.numeric(p1$AMD)))
+R1<-na.omit(R1)
+# BABA
+R2<-diff(log(as.numeric(p1$BABA)))
+R2<-na.omit(R2)
+# DPZ
+R3<-diff(log(as.numeric(p1$DPZ)))
+R3<-na.omit(R3)
+# FB
+R4<-diff(log(as.numeric(p1$FB)))
+R4<-na.omit(R4)
+# SAM
+R5<-diff(log(as.numeric(p1$SAM)))
+R5<-na.omit(R5)
+# MXX
+R6<-diff(log(as.numeric(p1$MXX)))
+R6<-na.omit(R6)
+
+ren<-data.frame(p1$Fecha[-1], R1, R2,R3,R4,R5)
+# Gráfico de los retornos de los activos
+#Gráfico de acciones
+rhistoricos<-ggplot(ren, aes(x=p1$Fecha[-1])) +
+        geom_line(aes(y=R1), color = 'aquamarine', size = 0.5) + 
+        geom_line(aes(y=R2), color = 'azure4', size = 0.5) +
+        geom_line(aes(y=R3), color = 'cornflowerblue', size = 0.5) +
+        geom_line(aes(y=R4), color = 'brown1', size = 0.5) +
+        geom_line(aes(y=R5), color = 'orange', size = 0.5) +
+        labs(x='Fecha', y='Rendimientos') +
+        ggtitle('Retornos del Portafolio de Inversión')
+#Gráfico interactivo de la evolución de los precios históricos        
+ggplotly(rhistoricos)
+
+```
+Ahora calculamos la Volatilidad de cada uno de los activos, calculando la desviación estándar de cada uno de los activos
+```{r,results='asis', message = FALSE, error = FALSE, warning= FALSE}
+
+# AMD
+vol_R1<-sd(R1)
+# BABA
+vol_R2<-sd(R2)
+# DPZ
+vol_R3<-sd(R3)
+# FB
+vol_R4<-sd(R4)
+# SAM
+vol_R5<-sd(R5)
+
+
+```
+Ahora calculamos el rendimiento de cada uno de los activos 
+```{r,results='asis', message = FALSE, error = FALSE, warning= FALSE}
+# AMD
+ren_R1<-mean(R1)
+# BABA
+ren_R2<-mean(R2)
+# DPZ
+ren_R3<-mean(R3)
+# FB
+ren_R4<-mean(R4)
+#SAM
+ren_R5<-mean(R5)
+
+# Ahora realizamos la gráfica de Riesgo-Rendimiento para saber cual es más riesgoso.
+Rendimiento<-c(ren_R1, ren_R2, ren_R3, ren_R4, ren_R5)
+Volatilidad<-c(vol_R1, vol_R2, vol_R3, vol_R4, vol_R5)
+
+
+RV<-matrix(c(vol_R1, ren_R1,
+             vol_R2, ren_R2,
+             vol_R3, ren_R3,
+             vol_R4, ren_R4,
+             vol_R5, ren_R5), ncol=2, nrow =5, byrow = TRUE)
+colnames(RV)<-c('Volatilidad', 'Rendimiento')
+rownames(RV)<-c('AMD', 'BABA', 'DPZ', 'FB', 'SAM');RV
+TRR<-data.frame(Volatilidad,Rendimiento )
+
+RR<-ggplot(data=TRR, aes(x=Volatilidad, y=Rendimiento))+geom_point()+
+  labs(x='Volatilidad', y='Rendimientos') +
+  ggtitle('Riesgo-Rendimiento del Portafolio de Inversión')
+ggplotly(RR)
+
+
+```
+Ahora vamos a calcular el el histograma de frecuencias de los rendimiento 
+para posteriormente calcular VaR
+```{r,results='asis', message = FALSE, error = FALSE, warning= FALSE}
+# AMD
+hist(R1, main='Histrograma AMD', ylab='Frecuencia',  
+     freq = FALSE, breaks = "FD", col='green')
+lines(density(R1), col='red')
+# BABA
+hist(R2, main='Histrograma BABA', ylab='Frecuencia',  
+     freq = FALSE, breaks = "FD", col='green')
+lines(density(R2), col='red')
+# DPZ
+hist(R3, main='Histrograma DPZ', ylab='Frecuencia',  
+     freq = FALSE, breaks = "FD", col='green')
+lines(density(R3), col='red')
+# FB
+hist(R4, main='Histrograma FB', ylab='Frecuencia',  
+     freq = FALSE, breaks = "FD", col='green')
+lines(density(R4), col='red')
+# AMD
+hist(R5, main='Histrograma SAM', ylab='Frecuencia',  
+     freq = FALSE, breaks = "FD", col='green')
+lines(density(R5), col='red')
+
+```
+```{r,results='asis', message = FALSE, error = FALSE, warning= FALSE}
+# AMD
+s1<-round(skewness(R1),2)
+k1<-round(kurtosis(R1),2)
+
+# BABA
+s2<-round(skewness(R2),2)
+k2<-round(kurtosis(R2),2)
+
+# DPZ
+s3<-round(skewness(R3),2)
+k3<-round(kurtosis(R3),2)
+
+# FB
+s4<-round(skewness(R4),2)
+k4<-round(kurtosis(R4),2)
+
+# SAM
+s5<-round(skewness(R5),2)
+k5<-round(kurtosis(R5),2)
+
+
+PE<-matrix(c(s1,k1,
+             s2,k2,
+             s3,k3,
+             s4,k4,
+             s5,k5), ncol=2, nrow =5, byrow = TRUE)
+colnames(PE)<-c('Simetría', 'Kurtosis')
+rownames(PE)<-c('AMD', 'BABA', 'DPZ', 'FB', 'SAM');PE
+
+# AMD
+j1<-jarque.test(as.vector(R1));j1
+
+# BABA
+j2<-jarque.test(as.vector(R2));j2
+
+# DPZ
+j3<-jarque.test(as.vector(R3));j3
+
+# FB
+j4<-jarque.test(as.vector(R4));j4
+
+# SAM
+j5<-jarque.test(as.vector(R5));j5
+
+
+```
+
+Ahora podemos calcular el Valor en Riesgo de cada una de las acciones
+
+```{r,results='asis', message = FALSE, error = FALSE, warning= FALSE}
+
+# AMD
+VaR_R1<-VaR(R1, p=0.95);VaR_R1
+CVaR_R1<-CVaR(R1, p=0.95);CVaR_R1
+x=seq(min(R1),max(R1),length=100)
+y=dnorm(x,mean=mean(R1),sd=sd(R1))
+plot(x,y, type='l', col='blue')
+x=seq(CVaR_R1,VaR_R1,length=100)
+y=dnorm(x,mean=mean(R1),sd=sd(R1))
+lines(x,y, col='blue')
+polygon(c(CVaR_R1,x,VaR_R1),c(0,y,0),col="red")
+abline(h=0, v=0, lty=3, col='gray')
+
+# BABA
+VaR_R2<-VaR(R2, p=0.95);VaR_R2
+CVaR_R2<-CVaR(R2, p=0.95);CVaR_R2
+x=seq(min(R2),max(R2),length=100)
+y=dnorm(x,mean=mean(R2),sd=sd(R2))
+plot(x,y, type='l', col='blue')
+x=seq(CVaR_R2,VaR_R2,length=100)
+y=dnorm(x,mean=mean(R2),sd=sd(R2))
+lines(x,y, col='blue')
+polygon(c(CVaR_R2,x,VaR_R2),c(0,y,0),col="red")
+abline(h=0, v=0, lty=3, col='gray')
+
+# DPZ
+VaR_R3<-VaR(R3, p=0.95);VaR_R3
+CVaR_R3<-CVaR(R3, p=0.95);CVaR_R3
+x=seq(min(R3),max(R3),length=100)
+y=dnorm(x,mean=mean(R3),sd=sd(R3))
+plot(x,y, type='l', col='blue')
+x=seq(CVaR_R3,VaR_R3,length=100)
+y=dnorm(x,mean=mean(R3),sd=sd(R3))
+lines(x,y, col='blue')
+polygon(c(CVaR_R3,x,VaR_R3),c(0,y,0),col="red")
+abline(h=0, v=0, lty=3, col='gray')
+
+# FB
+VaR_R4<-VaR(R4, p=0.95);VaR_R4
+CVaR_R4<-CVaR(R4, p=0.95);CVaR_R4
+x=seq(min(R4),max(R4),length=100)
+y=dnorm(x,mean=mean(R4),sd=sd(R4))
+plot(x,y, type='l', col='blue')
+x=seq(CVaR_R4,VaR_R4,length=100)
+y=dnorm(x,mean=mean(R4),sd=sd(R4))
+lines(x,y, col='blue')
+polygon(c(CVaR_R4,x,VaR_R4),c(0,y,0),col="red")
+abline(h=0, v=0, lty=3, col='gray')
+
+# SAM
+VaR_R5<-VaR(R5, p=0.95);VaR_R5
+CVaR_R5<-CVaR(R5, p=0.95);CVaR_R5
+x=seq(min(R5),max(R5),length=100)
+y=dnorm(x,mean=mean(R5),sd=sd(R5))
+plot(x,y, type='l', col='blue')
+x=seq(CVaR_R5,VaR_R5,length=100)
+y=dnorm(x,mean=mean(R5),sd=sd(R5))
+lines(x,y, col='blue')
+polygon(c(CVaR_R5,x,VaR_R5),c(0,y,0),col="red")
+abline(h=0, v=0, lty=3, col='gray')
+ 
+```
+Ahora vamos a calcular el VaR de las siguientes combinaciones
+ compuestas por dos acciones de las 5 que tenemos, es decir
+ 12,13,14,15,23,24,25,34,35,45
+
+```{r,results='asis', message = FALSE, error = FALSE, warning= FALSE}
+# Para esto primero distribuimos los pesos
+w1<-seq(0, 1, by=0.01);w1
+w2<-1-w1;w2
+
+# AMD y BABA
+
+# Ahora realizamos el calculo de la correlación 
+cor12<-cor(p1$AMD,p1$BABA);cor12
+# Calculamos los rendimientos del portafolio
+r12<-w1*vol_R1+w2*vol_R2
+# Calculamos la volatilidad del portafolio
+v12<-w1**2*vol_R1**2+w2**2*vol_R2**2+2*w1*w2*cor12*vol_R1*vol_R2;v12
+v12<-sqrt(v12);v12 #Volatilidad
+df<-data.frame(r12,v12, ncol=2)
+# Graficamos la volatilidad vs rendimiento para encontrar la curva eficiente donde se tiene el menor riesgo y su  rendimiento asociado
+g12<-ggplot(df, aes(x=v12, y=r12))+geom_point()
+g12<-ggplotly(g12);g12
+
+# AMD y DPZ
+
+# Ahora realizamos el calculo de la correlación 
+cor13<-cor(p1$AMD,p1$DPZ);cor13
+# Calculamos los rendimientos del portafolio
+r13<-w1*vol_R1+w2*vol_R3
+# Calculamos la volatilidad del portafolio
+v13<-w1**2*vol_R1**2+w2**2*vol_R3**2+2*w1*w2*cor12*vol_R1*vol_R3
+v13<-sqrt(v13);v13 #Volatilidad
+df<-data.frame(r13,v13, ncol=2)
+# Graficamos la volatilidad vs rendimiento para encontrar la curva eficiente donde se tiene el menor riesgo y su  rendimiento asociado
+g13<-ggplot(df, aes(x=v13, y=r13))+geom_point()
+g13<-ggplotly(g13);g13
+
+# Y así puedes hacer todas las combinaciones siempre y cuando el portafolio este compuesto de dos activos
+
+
+
+```
+Ahora vamos a calcular el riesgo y volatilidad de un portafolio compuesto 
+por n activos.
+
+Sea una matriz cuadrada en la cual la diagonal está compuesta por las volatilidades (desviaciones estándar) de cada activo del portafolio  y los elementos fuera de la diagonal sena ceros:
+
+\[[\sigma]=\begin{bmatrix}
+\sigma_{1} & 0&0&0&0 \\
+0& \sigma_{2}&0&0&0 \\
+0& 0&\sigma_{3}&0&0 \\
+0& 0&0&\sigma_{4}&0 \\
+0& 0&0&0&\sigma_{5} \\
+\end{bmatrix}\]
+
+Lo primero que tenemos que calcular es la matriz de correlaciones
+
+Con la matriz de correlaciones
+
+\[
+C=\begin{bmatrix}
+1 & \rho{12} &\rho{13}&\rho{14} &\rho_{15}\\
+\rho{21} & 1 &\rho{23}&\rho{24}&\rho_{15}\\
+\rho{31} & \rho{32} &1&\rho{34}&\rho_{15}\\
+\rho{41} & \rho{42} &\rho{43}&1&\rho_{15}\\
+\rho{51} & \rho{52} &\rho{53}&\rho_{54}&1\\
+\end{bmatrix}
+\]
+
+con  $\Sigma$ la matriz de 
+
+$$ [\Sigma]=[\sigma][C][\sigma]  $$
+
+Recordemos la formula para calcular la volatilidad es:
+
+$$ \sigma_{p}=\sqrt([w]^{t}[\Sigma][w]) $$
+
+
+
+
+Vamos a realizar una distribución de pesos para la construcción del portafolio
+
+```{r,results='asis', message = FALSE, error = FALSE, warning= FALSE}
+wp<-matrix(c(40,30,10,6,14), ncol=1, nrow=5, byrow = TRUE) # Pesos del portafolio
+nc<-2.33
+pf<-matrix(c(R1, R2, R3, R4, R5), ncol=5)
+corp<-cor(pf);corp #Cálculo de [C]
+# covp<-cov(pf);covp
+mvop<-matrix(c(vol_R1,0,0,0,0,
+               0,  vol_R2,0,0,0,
+               0,0,vol_R3,0,0,
+               0,0,0,vol_R4,0,
+               0,0,0,0,vol_R5), ncol=5, nrow=5);mvop # Cálculo de la matriz de volatilidades [\sigma]
+
+Sigma<-mvop%*%corp%*%mvop;Sigma  # Calculo de \sigma mayuscula
+sigma_p<-sqrt(t(wp)%*%Sigma%*%wp);sigma_p # Cálculo de la volatilidad del Portafolio
+Var_p<-nc*(sigma_p/100)*5000*sqrt(1/252);Var_p # Cálculo del Valor en Riesgo del portafolio
+```
+Una matriz muy importante en la medición de riesgo es la llamada matriz de varianza-covarianza. La diagonal principal esté compuesta por las varianzas y los elementos fuera de la diagonal por las covarianzas. 
+
+
+\[
+[\Sigma]=\begin{bmatrix}
+\sigma_{1}^{2} & cov(r_{1},r_{2})& cov(r_{1},r_{3}) & cov(r_{1},r_{4})\\
+ cov(r_{2},r_{1}) & \sigma_{2}^{2}& cov(r_{2},r_{3})&  cov(r_{2},r_{4})\\
+ cov(r_{3},r_{1}) &  cov(r_{3},r_{2}) &\sigma_{3}^{2}& cov(r_{3},r_{4})\\
+ cov(r_{4},r_{1}) & cov(r_{4},r_{2}) & cov(r_{4},r_{3})&\sigma_{4}^{2}\\
+\end{bmatrix}
+\]
+
+
+

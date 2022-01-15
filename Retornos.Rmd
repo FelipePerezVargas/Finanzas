@@ -1,0 +1,92 @@
+---
+title: "Ejercicios Riesgo y Rendimiento usando R"
+author: "Felipe Pérez Vargas"
+date: "19/2/2021"
+output: html_document
+---
+
+
+En la clase del día de hoy vamos a realizar las siguientes actividades:
+
+
+* Descargar datos históricos de una acción usando el comando getSymbols del paquete quantmod.
+
+* Calcular los retornos diarios, semanales, mensuales, trimestrales y anuales. Así, como sus gráficos respectivos
+
+
+* Graficar los precios históricos.
+
+
+Para poder descargas los precios históricos de una acción primero invocamos las librerías **quantmod** y **ggplot2**. Después usamos los siguientes comandos para obtener la información deseada.
+
+```{r,results='asis', message = FALSE, error = FALSE, warning= FALSE}
+library(quantmod)
+library(ggplot2)
+
+s1<-getSymbols('BBAJIOO.MX', source='yahoo',
+               from = '2016-02-19', 
+               auto.assign = FALSE, warnings = FALSE)
+
+
+
+```
+
+Ya tenemos los información de **Banco del Bajío** de un periodo de 5 años.
+
+
+Ahora podemos calcular los retornos usando el siguiente código:
+
+```{r,results='asis', message = FALSE, error = FALSE, warning= FALSE}
+# Retornos diario ####
+s1.d<-dailyReturn(s1$BBAJIOO.MX.Close)
+# Retornos semanales ####
+s1.s<-weeklyReturn(s1$BBAJIOO.MX.Close)
+# Retornos mensuales ####
+s1.m<-monthlyReturn(s1$BBAJIOO.MX.Close)
+# Retornos trimestrales ####
+s1.t<-quarterlyReturn(s1$BBAJIOO.MX.Close)
+# Retornos anuales ####
+s1.a<-annualReturn(s1$BBAJIOO.MX.Close)
+
+
+```
+
+Ahora podemos graficar los retornos de cada caso 
+
+```{r,results='asis', message = FALSE, error = FALSE, warning= FALSE}
+# Gráfica retornos diarios
+chartSeries(s1.d)
+# Gráfica retornos semanales
+chartSeries(s1.s)
+# Gráfica retornos mensuales
+chartSeries(s1.m)
+# Gráfica retornos trimestrales
+chartSeries(s1.t)
+# Gráfica retornos anuales
+chartSeries(s1.a)
+
+```
+Ahora vamos a calcular el riesgo y el rendimiento de varios activos financieros
+
+Podemos calcular los rendimientos
+
+
+```{r}
+rd<-ROC(s1$BBAJIOO.MX.Adjusted, n=1, na.pad = TRUE, type = 'discrete')
+rc<-ROC(s1[,6], n=1, na.pad = TRUE, type = 'continuous')
+rd<-na.omit(rd) #Omitimos NA
+colnames(rd)<-'R_Simple'
+rc<-na.omit(rd) #Omitimos NA
+colnames(rd)<-'R_Continuo'
+
+S1<-as.matrix(s1, ncol=6)
+
+plot(S1[,1], S1[,2])
+
+# findPeaks(s1.s)
+# findValleys(s1.s,thresh = 0)
+
+
+```
+
+

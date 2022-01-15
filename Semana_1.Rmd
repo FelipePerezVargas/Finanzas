@@ -1,0 +1,157 @@
+---
+title: "Riesgos Financieros de Mercado y Productos Derivados"
+author: "Felipe Pérez Vargas"
+date: "22/12/2020"
+output:
+  html_document: default
+  self_contained: True
+theme: united
+highlight: textmate
+number_sections: yes
+# runtime: shiny
+---
+
+## Temas y Subtemas {.tabset .tabset-fade .tabset-pills}
+
+### OBJETIVO DEL CURSO
+
+_______________________________________________________________
+
+
+Al termino del curso, el alumno identificara los factores más importantes del riesgo
+de mercado y las curvas de tasas de interés a los que están sujetos las instituciones bancarias y financieras, como objeto de cuantificarlos y mitigarlos para optimizar los potafolios de inversión
+
+
+____________________________________________________________________________
+
+
+### LOS RIESGOS FINANCIEROS
+
+______________________________________________________________________________
+
+
+* 1.1 Definición y características del riesgo
+* 1.2 El ciclo de la administración del riesgo
+* 1.3 La relación Riesgo-Rendimiento
+* 1.4 Los riesgos incurridos por las instituciones financieras de acuerdo a Basilea
+* 1.5 El perfil del Inversionista
+* 1.6 Especuladores, hedgers e inversionistas
+
+______________________________________________________________________________
+
+
+### RIESGO DE MERCADO Y SU CUANTIFICACIÓN
+
+______________________________________________________________________________
+
+
+* 2.1 La volatilidad 
+* 2.2 La distribución de probabilidad de la volatilidad
+* 2.3 Otros modelos de medición de la volatilidad: GARCH y ARCH
+* 2.4 La correlación en el riesgo de mercado y sus aplicaciones
+* 2.5 Las matrices de la varianza covarianza y sus aplicaciones
+* 2.6 Los modelos de Valor en Riesgo y su metodología
+* 2.7 La duración y su convexidad y aplicaciones
+* 2.8 El modelo de Valoración de Activos
+* 2.9 La eficiencia de los mercados
+* 2.9.1 Los mercados eficientes
+* 2.9.2 Los mercados semi-eficientes
+
+
+______________________________________________________________________________
+
+
+
+### EL RIESGO DE MERCADO Y SU MITIGACIÓN
+
+______________________________________________________________________________
+
+
+* 3.1 Las características de los productos derivados
+* 3.2 Los mercados donde operan los productos derivados
+* 3.3 Las implicaciones del riesgo de mercado y la normatividad financiera
+* 3.4 Los principales derivados 
+* 3.4.1 Futuros y Forwards
+* 3.4.2 Las posiciones cortas y largas
+* 3.4.3 La determinación de su precio
+* 3.4.4 Las estrategias de cobertura
+* 3.4.5 La aplicación en tasa de interés; FRA's
+* 3.5 Las opciones 
+* 3.5.1 Las compras y ventas (Call y Puts )
+* 3.5.2 El valor tiempo y valor intrinsico
+* 3.5.3 El modelo Black & Scholes
+* 3.5.4 El modelo de paridad Call Put y sus aplicaciones
+* 3.5.5 Las griegas $\alpha$, $\gamma$, $\rho$ y $\theta$
+* 3.6 Swaps(Permuta financiera)
+* 3.6.1 Los tipos de Swap
+* 3.6.2 La naturaleza y concepto de ventaja competitiva del Swap
+* 3.6.3La determinación del precio de un Swap
+
+______________________________________________________________________________
+
+
+
+### LAS CURVAS DE TASAS DE MERCADO 
+
+______________________________________________________________________________
+
+
+* 4.1 La curva yield to maturity y su cálculo
+* 4.2 La curva Spot o tasa cupón cero
+* 4.3 La curva de tasas forward
+* 4.3.1 El cálculo de la tasa froward
+* 4.4 Las tasas Swap
+* 4.5 La interpretación e interpolación de la curva de rendimiento 
+* 4.6 Los modelos de las tasas de rendimiento
+* 4.6.1 El modelo Vasicek y Merton
+* 4.7 Las curvas de tasas en el mercado de bonos 
+```{r}
+x<-seq(1,19, by=0.1)
+plot(x,x)
+
+
+```
+
+______________________________________________________________________________
+
+
+
+### BIBILOGRAFÍA 
+
+_____________________________________________________
+
+
+* Jorion, P. (2003). Valor en riesgo. México: Limusa.
+
+______________________________________________________________________________
+
+
+* Jesús, B. M. (2013). Incertidumbre y riesgos en decisiones financieras. Bogotá: Ecoe Ediciones.
+
+_______________________________________________________________
+
+
+* Carmen, S. S. (2014). Análisis fundamental para la valoración y la toma de decisiones. Bogotá: Alfaomega.
+
+
+________________________________________________________________
+
+### ACREDITACIÓN 
+
+| Rubrica                                           |Porcentaje| 
+|:--------------------------------------------------|---------:|
+| Reporte de lecturas financieras y mercados        |10 $\%$   | 
+| Solución de casos prácticos y ejercicios en clase |30 $\%$   |
+| Examen Escrito                                    |40 $\%$   | 
+| Programación                                      |20 $\%$   |
+
+### SOFTWARE 
+
+Los software y/o paquetes estadísticos que se van a utilizar durante el curso son los siguientes: 
+
+**[R Project](https://www.r-project.org)**<br>
+**[R Studio](https://rstudio.com/products/rstudio/download/)**<br>
+**[Power BI Desktop](https://powerbi.microsoft.com/es-es/desktop/)**<br>
+**Excel**<br>
+
+
